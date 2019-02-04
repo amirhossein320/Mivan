@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مهمان</string>
+    <string name="title_activity_maps">نقشه</string>
+    <string name="nature">طبیعت</string>
+    <string name="parking">پارکینگ</string>
+    <string name="gas_station">جایگاه سوخت گیری</string>
+    <string name="hotel">هتل</string>
+    <string name="important_places">اماکن مهم</string>
+    <string name="wc">سرویس بهداشتی</string>
+    <string name="parks">پارک</string>
+    <string name="mosque">مسجد</string>
+    <string name="restaurant">رستوران</string>
+    <string name="norooz_guest_accommodation">کحل اسکان مهمانان نوروزی</string>
+    <string name="english">english</string>
+    <string name="persian">فارسی</string>
+    <string name="kurdish">کوردی</string>
+    <string name="choose">انتخاب زبان</string>
+</resources>

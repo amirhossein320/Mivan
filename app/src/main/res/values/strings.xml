@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">MivanFinal</string>
     <string name="title_activity_maps">Map</string>
+    <string name="nature">nature</string>
+    <string name="parking">parking</string>
+    <string name="gas_station">gas station</string>
+    <string name="hotel">hotel</string>
+    <string name="important_places">important places</string>
+    <string name="wc">wc</string>
+    <string name="parks">parks</string>
+    <string name="mosque">mosque</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="norooz_guest_accommodation">Norooz Guest Accommodation</string>
+    <string name="english">english</string>
+    <string name="persian">فارسی</string>
+    <string name="kurdish">کوردی</string>
+    <string name="choose">choose language</string>
 </resources>

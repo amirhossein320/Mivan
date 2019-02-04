@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">میوان</string>
+    <string name="title_activity_maps">نقشه</string>
+    <string name="nature">دیمن</string>
+    <string name="parking">پارکینگ</string>
+    <string name="gas_station">جایگاه سوختگیری</string>
+    <string name="hotel">هتل</string>
+    <string name="important_places">جیگای خاص</string>
+    <string name="parks">پارک</string>
+    <string name="mosque">مزگه وت</string>
+    <string name="restaurant">رستوران</string>
+    <string name="norooz_guest_accommodation">جیگای میوانانی نوروزی</string>
+    <string name="wc">دستشویی</string>
+    <string name="english">english</string>
+    <string name="persian">فارسی</string>
+    <string name="kurdish">کوردی</string>
+    <string name="choose">هه لبژاردنی زوبان</string>
+</resources>
