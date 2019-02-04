@@ -16,4 +16,6 @@
     <string name="persian">فارسی</string>
     <string name="kurdish">کوردی</string>
     <string name="choose">انتخاب زبان</string>
+    <string name="list_of_places">لیست مکان ها</string>
+
 </resources>

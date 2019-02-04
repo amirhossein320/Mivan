@@ -45,12 +45,19 @@ public class Preferences {
     }
 
     //set local app language
-    public void setLocaleApp(String language) {
+    public void setLocaleLang(String language) {
         getEditor().putString(LANG, language).apply();
+    }
+
+    //change local of app
+    public void setLocalToApp() {
+        new App().setLocale(context, getLang());
     }
 
     //get local app language
     public String getLang() {
         return getPreferences().getString(LANG, "fa");
     }
+
+
 }

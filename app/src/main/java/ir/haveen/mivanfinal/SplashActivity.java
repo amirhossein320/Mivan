@@ -1,6 +1,5 @@
 package ir.haveen.mivanfinal;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +16,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         preferences = new Preferences(this);
-        setLocalToApp();
+        preferences.setLocalToApp();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
         if (preferences.IsFirstRun()) {//check first run
@@ -35,17 +33,17 @@ public class SplashActivity extends AppCompatActivity {
     private void click() {
 
         binding.btnFA.setOnClickListener((v) -> {
-            preferences.setLocaleApp("fa");
+            preferences.setLocaleLang("fa");
             preferences.setFirstRunOff();
             loadData();
         });
         binding.btnKU.setOnClickListener((v) -> {
-            preferences.setLocaleApp("ku");
+            preferences.setLocaleLang("ku");
             preferences.setFirstRunOff();
             loadData();
         });
         binding.btnEN.setOnClickListener((v) -> {
-            preferences.setLocaleApp("en");
+            preferences.setLocaleLang("en");
             preferences.setFirstRunOff();
             loadData();
         });
@@ -54,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setLocalToApp();
+        preferences.setLocalToApp();
     }
 
     //load data from server
@@ -81,9 +79,5 @@ public class SplashActivity extends AppCompatActivity {
         }).start();
     }
 
-    //change local of app
-    private void setLocalToApp() {
-        new App().setLocale(SplashActivity.this, preferences.getLang());
-    }
 
 }

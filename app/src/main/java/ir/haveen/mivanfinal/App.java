@@ -20,8 +20,7 @@ public class App extends Application {
         Preferences preferences = new Preferences(this);
 
         if (!preferences.IsFirstRun()) {
-            setLocale(this,
-                    preferences.getPreferences().getString("Lang", "fa"));
+            preferences.setLocalToApp();
         }
 
     }

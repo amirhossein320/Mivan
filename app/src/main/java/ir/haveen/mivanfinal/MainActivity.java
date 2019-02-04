@@ -15,13 +15,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         preferences = new Preferences(this);
-        setLocalToApp();
-
-        binding = DataBindingUtil.setContentView(this,
-                R.layout.activity_main);
+        preferences.setLocalToApp();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.setOnClick(new ViewHandler()); // for item click in view
 
@@ -30,11 +26,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setLocalToApp();
+        preferences.setLocalToApp();
     }
 
-    //change local of app
-    private void setLocalToApp() {
-        new App().setLocale(MainActivity.this, preferences.getLang());
-    }
+
 }

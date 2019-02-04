@@ -12,6 +12,6 @@ public class ViewHandler {
     }
 
     public void setLocaleApp(Preferences preferences, String language) {
-        preferences.setLocaleApp(language);
+        preferences.setLocaleLang(language);
     }
 }
