@@ -17,5 +17,7 @@
     <string name="kurdish">کوردی</string>
     <string name="choose">هه لبژاردنی زوبان</string>
     <string name="list_of_places">لیستی جیگایه کان</string>
+    <string name="lang_text">عیره یکیکه له مکانه خوشه کانی پیراشنار</string>
+    <string name="place_test">" \\n پردانان پردانان"</string>
 
 </resources>

@@ -17,5 +17,7 @@
     <string name="kurdish">کوردی</string>
     <string name="choose">انتخاب زبان</string>
     <string name="list_of_places">لیست مکان ها</string>
+    <string name="lang_text">این منظره زیبا از جاذبه های دیدنیه این شهر است.</string>
+    <string name="place_test">پردانان</string>
 
 </resources>

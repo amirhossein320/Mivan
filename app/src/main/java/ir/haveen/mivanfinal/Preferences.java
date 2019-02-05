@@ -1,7 +1,10 @@
 package ir.haveen.mivanfinal;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.Locale;
 
@@ -50,8 +53,16 @@ public class Preferences {
     }
 
     //change local of app
-    public void setLocalToApp() {
-        new App().setLocale(context, getLang());
+    public void setLocalToApp(AppCompatActivity activity) {
+
+        Locale locale = new Locale("fa");
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+        activity.getBaseContext().getResources().
+                updateConfiguration(config,
+                        activity.getBaseContext().getResources().getDisplayMetrics());
     }
 
     //get local app language

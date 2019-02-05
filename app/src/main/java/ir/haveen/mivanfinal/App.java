@@ -20,28 +20,11 @@ public class App extends Application {
         Preferences preferences = new Preferences(this);
 
         if (!preferences.IsFirstRun()) {
-            preferences.setLocalToApp();
+            setLocale(this, preferences.getLang());
         }
 
     }
 
-    //change locale app
-//    public void setLocale(String language) {
-//
-//        Locale locale = new Locale(language);
-//        Locale.setDefault(locale);
-//
-//        Resources res = getResources();
-//        Configuration config = new Configuration(res.getConfiguration());
-//        if (Build.VERSION.SDK_INT >= 17) { // for api 17 or hig
-//            config.setLocale(locale);
-//            createConfigurationContext(config);
-//        } else { //for api 16
-//            config.locale = locale;
-//            res.updateConfiguration(config, res.getDisplayMetrics());
-//        }
-//
-//    }
 
     public void setLocale(Context context, String lang) {
         Locale myLocale = new Locale(lang);

@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = new Preferences(this);
-        preferences.setLocalToApp();
+        preferences.setLocalToApp(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
         if (preferences.IsFirstRun()) {//check first run
@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        preferences.setLocalToApp();
+        preferences.setLocalToApp(this);
     }
 
     //load data from server

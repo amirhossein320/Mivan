@@ -1,6 +1,5 @@
 package ir.haveen.mivanfinal;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = new Preferences(this);
-        preferences.setLocalToApp();
+        preferences.setLocalToApp(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.setOnClick(new ViewHandler()); // for item click in view
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        preferences.setLocalToApp();
+        preferences.setLocalToApp(this);
     }
 
 
