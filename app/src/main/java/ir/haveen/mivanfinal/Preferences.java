@@ -1,5 +1,6 @@
 package ir.haveen.mivanfinal;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
@@ -7,6 +8,11 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.Locale;
+
+import ir.haveen.mivanfinal.database.Database;
+import ir.haveen.mivanfinal.net.Api;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -16,6 +22,7 @@ public class Preferences {
     private Context context;
     private SharedPreferences preferences;
     private String FIRST_RUN = "FirstRun";
+    private Database database;
 
     public Preferences(Context context) {
         this.context = context;
@@ -71,4 +78,23 @@ public class Preferences {
     }
 
 
+    //init database
+    private void setDatabase() {
+        this.database = Room.databaseBuilder(context, Database.class, "data").allowMainThreadQueries().build();
+    }
+
+    //get database
+    public Database getDatabase() {
+        setDatabase();
+        return database;
+    }
+
+    //return api
+    public Api api(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(Api.class);
+    }
 }

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:sothree="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="layoutManager"
+            type="android.support.v7.widget.RecyclerView.LayoutManager" />
+
+        <variable
+            name="list"
+            type="java.util.List" />
+        <variable
+            name="items"
+            type="ir.haveen.mivanfinal.model.view.PlaceViewModel" />
 
     </data>
 
@@ -12,18 +22,19 @@
         android:layout_height="match_parent">
 
 
-        <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout
             android:id="@+id/sliding_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
             android:gravity="bottom"
             sothree:layout_constraintBottom_toBottomOf="parent"
             sothree:layout_constraintEnd_toEndOf="parent"
             sothree:layout_constraintStart_toStartOf="parent"
             sothree:layout_constraintTop_toTopOf="parent"
-            sothree:umanoPanelHeight="68dp"
-            sothree:umanoShadowHeight="4dp"
-            sothree:umanoScrollableView="@id/recyclerItems">
+            sothree:umanoPanelHeight="?attr/actionBarSize"
+            sothree:umanoScrollableView="@id/recyclerItems"
+            sothree:umanoShadowHeight="4dp">
 
             <fragment
                 android:id="@+id/map"
@@ -36,73 +47,88 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/background_light">
 
-                <ImageView
-                    android:id="@+id/imageView11"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    map:srcCompat="@mipmap/accommodation"
-                    sothree:layout_constraintBottom_toTopOf="@+id/guideline23"
-                    sothree:layout_constraintDimensionRatio="2:2"
-                    sothree:layout_constraintEnd_toEndOf="@+id/guideline24"
-                    sothree:layout_constraintStart_toStartOf="parent"
-                    sothree:layout_constraintTop_toTopOf="parent" />
-
                 <android.support.constraint.Guideline
-                    android:id="@+id/guideline23"
+                    android:id="@+id/guideline28"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    sothree:layout_constraintGuide_percent="0.10" />
+                    sothree:layout_constraintGuide_begin="?attr/actionBarSize" />
 
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline24"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    sothree:layout_constraintGuide_percent="0.20" />
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/constraintLayout2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/colorPrimary"
+                    sothree:layout_constraintBottom_toTopOf="@+id/guideline28"
+                    sothree:layout_constraintEnd_toEndOf="parent"
+                    sothree:layout_constraintStart_toStartOf="parent"
+                    sothree:layout_constraintTop_toTopOf="parent">
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        sothree:layout_constraintGuide_begin="?attr/actionBarSize" />
+
+                    <ImageView
+                        android:id="@+id/imageView11"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        map:srcCompat="@mipmap/accommodation"
+                        sothree:layout_constraintBottom_toTopOf="@+id/guideline23"
+                        sothree:layout_constraintDimensionRatio="2:2"
+                        sothree:layout_constraintEnd_toEndOf="@+id/guideline24"
+                        sothree:layout_constraintStart_toStartOf="parent"
+                        sothree:layout_constraintTop_toTopOf="parent" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        sothree:layout_constraintGuide_percent="0.20" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="right|center"
+                        android:text="@string/list_of_places"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColor="@android:color/background_light"
+                        sothree:layout_constraintBottom_toTopOf="@+id/guideline23"
+                        sothree:layout_constraintEnd_toEndOf="parent"
+                        sothree:layout_constraintHorizontal_bias="0.0"
+                        sothree:layout_constraintStart_toEndOf="@+id/guideline24"
+                        sothree:layout_constraintTop_toTopOf="parent"
+                        sothree:layout_constraintVertical_bias="1.0" />
+                </android.support.constraint.ConstraintLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerItems"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
                     android:clipToPadding="false"
+                    android:padding="8dp"
                     sothree:layout_constraintBottom_toBottomOf="parent"
                     sothree:layout_constraintEnd_toEndOf="parent"
                     sothree:layout_constraintHorizontal_bias="0.0"
                     sothree:layout_constraintStart_toStartOf="parent"
-                    sothree:layout_constraintTop_toTopOf="@+id/guideline23"
+                    sothree:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
                     sothree:layout_constraintVertical_bias="1.0" />
 
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="right|center"
-                    android:text="@string/list_of_places"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    sothree:layout_constraintBottom_toTopOf="@+id/guideline23"
-                    sothree:layout_constraintEnd_toEndOf="parent"
-                    sothree:layout_constraintHorizontal_bias="0.0"
-                    sothree:layout_constraintStart_toEndOf="@+id/guideline24"
-                    sothree:layout_constraintTop_toTopOf="parent"
-                    sothree:layout_constraintVertical_bias="1.0" />
             </android.support.constraint.ConstraintLayout>
 
 

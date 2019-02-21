@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import ir.haveen.mivanfinal.databinding.ActivitySplashBinding;
 
@@ -70,7 +69,6 @@ public class SplashActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                binding.progressBar.setVisibility(View.INVISIBLE);
                 Intent in = new Intent(this, MainActivity.class);
                 startActivity(in);
                 finish();
