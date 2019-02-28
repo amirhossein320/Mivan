@@ -8,10 +8,11 @@ import ir.haveen.mivanfinal.model.db.DetailsItem;
 
 public class ViewHandler {
 
-    public void mainViewItemClick(View view, int position) {
+    public void mainViewItemClick(View view, int position, String image, String title) {
         Intent in = new Intent(view.getContext(), MapsActivity.class);
         in.putExtra("id", position);
-//        in.putExtra("resImage", image);
+        in.putExtra("resImage", image);
+        in.putExtra("tag", title);
         view.getContext().startActivity(in);
     }
 
@@ -19,7 +20,7 @@ public class ViewHandler {
         preferences.setLocaleLang(language);
     }
 
-    public void  onItemClick(View view){
+    public void onItemClick(View view) {
         Toast.makeText(view.getContext(), "amir", Toast.LENGTH_SHORT).show();
     }
 }

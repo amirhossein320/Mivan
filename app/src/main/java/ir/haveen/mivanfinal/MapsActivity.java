@@ -5,8 +5,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,13 +16,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -31,10 +31,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONObject;
 
@@ -48,32 +47,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ir.haveen.mivanfinal.adapter.FlodingPlaceItem;
+import ir.haveen.mivanfinal.adapter.NaturePlaceItem;
+import ir.haveen.mivanfinal.adapter.ItemClickListener;
 import ir.haveen.mivanfinal.adapter.PlaceItem;
 import ir.haveen.mivanfinal.databinding.ActivityMapsBinding;
 import ir.haveen.mivanfinal.model.db.DetailsItem;
 import ir.haveen.mivanfinal.model.view.PlaceViewModel;
-import ir.haveen.mivanfinal.net.Api;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, ItemClickListener {
 
+    private final float MAX_ZOOM = 20.0f;
+    private final float MIN_ZOOM = 11.0f;
     private final float DEFAULT_ZOOM = 14.6f;
+    private final int REQUEST_CODE = 427;
+    private final SlidingUpPanelLayout.PanelState COLLAPSED = SlidingUpPanelLayout.PanelState.COLLAPSED;
+    private final SlidingUpPanelLayout.PanelState EXPANDED = SlidingUpPanelLayout.PanelState.EXPANDED;
+
     private GoogleMap mMap;
     private Preferences preferences;
     private ActivityMapsBinding binding;
-    private final int REQUEST_CODE = 427;
-    private int id;
     private LatLng piranshahr;
     private Location location;
     private LatLng myLocation;
-    private List<DetailsItem> array;
-    private int resImage;
-    private FlodingPlaceItem foldingAdapter;
+    private NaturePlaceItem foldingAdapter;
     private PlaceItem placeAdapter;
+    private SlidingUpPanelLayout slidingLayout;
+    private List<DetailsItem> array;
+
+    private int id;
+    private String resImage;
+    private String title;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +85,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         preferences = new Preferences(this);
         preferences.setLocalToApp(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_maps);
+        slidingLayout = binding.slidingLayout; // initialize sliding_ui_panel
 
-        checkPermision();
+        checkPermision(); // check permission
+        // get data sent by intent
         id = getIntent().getIntExtra("id", 0);
-        resImage = getIntent().getIntExtra("resImage", R.mipmap.place);
+        resImage = getIntent().getStringExtra("resImage");
+        title = getIntent().getStringExtra("tag");
 
-
+//        binding.title_group.setText(title);
+//        binding.icon_title.setImageResource(getResources().getIdentifier(resImage, "mipmap", getPackageName()));
+        // get load data from db
         PlaceViewModel placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
         placeViewModel.getPlaces(id).observe(this, detailsItems -> {
 
-            array = detailsItems;
+            array = detailsItems; // set data to field object
+
             //load map
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
@@ -99,12 +109,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //set layout manager to recycler
             binding.recyclerItems.setLayoutManager(new LinearLayoutManager(this));
             //set adapter by type of group
-            if (detailsItems.get(0).getGroupId() == 1) {
-                foldingAdapter = new FlodingPlaceItem(detailsItems);
+            if (id == 1) {
+                foldingAdapter = new NaturePlaceItem(detailsItems, this);
                 binding.recyclerItems.setAdapter(foldingAdapter);
-                foldingAdapter.Onclick(mMap, myLocation);
             } else {
-                placeAdapter = new PlaceItem(detailsItems);
+                placeAdapter = new PlaceItem(detailsItems, this);
                 binding.recyclerItems.setAdapter(placeAdapter);
             }
         });
@@ -119,9 +128,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        float MAX_ZOOM = 20.0f;
         mMap.setMaxZoomPreference(MAX_ZOOM);
-        float MIN_ZOOM = 11.0f;
         mMap.setMinZoomPreference(MIN_ZOOM);
 
         //map move to piranshahr
@@ -129,38 +136,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         loadMap(); //load all places of group
 
-
-        LatLng origin = new LatLng(36.706382, 45.1387739);
-        LatLng dest = new LatLng(36.7067615, 45.147292);
-
-        FetchUrl fetchUrl = new FetchUrl();
-        fetchUrl.execute(getUrl(origin, dest));
-
-
         GpsTracker gpsTracker = new GpsTracker(this);
         location = gpsTracker.getLocation();
         if (gpsTracker.canGetLocation()) {
             if (location != null) {
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
                 myLocation = new LatLng(location.getLatitude(), location.getLongitude());
             } else {
-                Toast.makeText(this, "no location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.TagLocation, Toast.LENGTH_SHORT).show();
             }
         }
 
 
     }
 
+    //draw all places on map
     private void loadMap() throws SecurityException {
-        //show all places on map
         for (DetailsItem data : array) {
             LatLng place = new LatLng(data.getWidth(), data.getHeight());
+            int height = 80;
+            int width = 80;
+            Bitmap bitmapdraw = BitmapFactory.decodeResource(getResources(),
+                    getResources().getIdentifier(resImage, "mipmap", getPackageName()));
+            Bitmap smallMarker = Bitmap.createScaledBitmap(bitmapdraw, width, height, false);
             mMap.addMarker(new MarkerOptions().position(place).title(data.getName()).
-                    icon(BitmapDescriptorFactory.fromResource(resImage)));
+                    icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         }
 
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -186,7 +189,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (slidingLayout.getPanelState() == EXPANDED) {
+            slidingLayout.setPanelState(COLLAPSED);
+        } else if (slidingLayout.getPanelState() == COLLAPSED) {
+            super.onBackPressed();
+        }
     }
 
     //get for permission
@@ -206,29 +213,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    private String getUrl(LatLng origin, LatLng dest) {
+    // recycler item click
+    @Override
+    public void onItemClick(View item, int position) {
+        if (location != null) {
+            mMap.clear();
+            loadMap();
+            myLocation = new LatLng(array.get(position + 1).getWidth(), array.get(position + 1).getHeight());
+            LatLng dest = new LatLng(array.get(position).getWidth(), array.get(position).getHeight());
 
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+            FetchUrl fetchUrl = new FetchUrl();
+            fetchUrl.execute(getUrl(myLocation, dest));
+            slidingLayout.setPanelState(COLLAPSED);
+        } else {
+            Toast.makeText(this, R.string.TagLocation, Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-
-
-        // Sensor enabled
-        String sensor = "sensor=false";
-
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + "key=" + "AIzaSyAOqTp27q2gQa1hmY_iUQX4pqIX0dZa5Ko";
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
-
-        return url;
+    // natureDetails click listener
+    @Override
+    public void natureDetailsClickListener(View view, int position) {
+        Toast.makeText(this, array.get(position).getName(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -263,49 +268,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
-    private String downloadUrl(String strUrl) throws IOException {
-        String data = "";
-        InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
-        try {
-            URL url = new URL(strUrl);
-
-            // Creating an http connection to communicate with url
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            // Connecting to url
-            urlConnection.connect();
-
-            // Reading data from url
-            iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-            StringBuffer sb = new StringBuffer();
-
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-            data = sb.toString();
-            Log.d("downloadUrl", data.toString());
-            br.close();
-
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        } finally {
-            iStream.close();
-            urlConnection.disconnect();
-        }
-        return data;
-    }
-
-
+    // Parsing the data in non-ui thread
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -372,4 +337,71 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+
+    // download data
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+            Log.d("downloadUrl", data.toString());
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    //make url for download path between places
+    private String getUrl(LatLng origin, LatLng dest) {
+
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + "key=" + "AIzaSyAOqTp27q2gQa1hmY_iUQX4pqIX0dZa5Ko";
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+
+        return url;
+    }
+
+
 }

@@ -72,7 +72,7 @@
                         sothree:layout_constraintGuide_begin="?attr/actionBarSize" />
 
                     <ImageView
-                        android:id="@+id/imageView11"
+                        android:id="@+id/icon_title"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginBottom="8dp"
@@ -96,7 +96,7 @@
                         sothree:layout_constraintGuide_percent="0.20" />
 
                     <TextView
-                        android:id="@+id/textView10"
+                        android:id="@+id/title_group"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginEnd="8dp"

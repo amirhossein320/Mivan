@@ -19,5 +19,16 @@
     <string name="list_of_places">لیستی جیگایه کان</string>
     <string name="lang_text">عیره یکیکه له مکانه خوشه کانی پیراشنار</string>
     <string name="place_test">" \\n پردانان پردانان"</string>
+    <string name="TagLocation">جیگای ئیوه نه دیترایه وه!</string>
+    <string name="touristList">لیستی منزه ره کان</string>
+    <string name="mosqueList">لیستی مزگه وته کان</string>
+    <string name="hotelList">لیستی هوتیله کان</string>
+    <string name="gasList">لیستی پمپی بنزینه کان</string>
+    <string name="parkingList">لیستی پارکینگه کان</string>
+    <string name="resturantList">لیستی رستورانه کان</string>
+    <string name="parksList">لیستی پارکه کان</string>
+    <string name="wcList">لیستی توالیته کان</string>
+    <string name="importantsList">لیستی جیگا موهیممه کان</string>
+    <string name="schoolList">لیستی جیگا نیشته جیکانی مفته</string>
 
 </resources>

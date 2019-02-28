@@ -7,60 +7,42 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 
 import ir.haveen.mivanfinal.R;
 import ir.haveen.mivanfinal.databinding.FlodingPlaceItemBinding;
 import ir.haveen.mivanfinal.model.db.DetailsItem;
 
-public class FlodingPlaceItem extends RecyclerView.Adapter<FlodingPlaceItem.ViewHolder> {
+public class NaturePlaceItem extends RecyclerView.Adapter<NaturePlaceItem.ViewHolder> {
 
     private List<DetailsItem> items;
-    private FlodingPlaceItemBinding view;
     private DetailsItem item;
-    private LatLng myLocation;
-    private GoogleMap mMap;
     private Context context;
+    private ItemClickListener itemClickListener;
 
-    public FlodingPlaceItem(List<DetailsItem> items) {
+    public NaturePlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener) {
         this.items = items;
+        this.itemClickListener = itemClickListener;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         FlodingPlaceItemBinding binding =
                 DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                         R.layout.floding_place_item, parent, false);
-        context = binding.getRoot().getContext();
+        context = parent.getContext();
         return new ViewHolder(binding);
-
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         item = items.get(position);
         holder.binding.title.setText(item.getName());
-        holder.binding.card.setOnClickListener(v -> {
-            if(myLocation != null){
-            }else {
-                Toast.makeText(context, "مکان شما در دسترس نیست", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    public void Onclick(GoogleMap mMap, LatLng myLocation) {
-        this.mMap = mMap;
-        this.myLocation = myLocation;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -70,6 +52,12 @@ public class FlodingPlaceItem extends RecyclerView.Adapter<FlodingPlaceItem.View
         ViewHolder(FlodingPlaceItemBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
+            itemView.getRoot().setOnClickListener(v ->
+                    itemClickListener.onItemClick(itemView.getRoot(), getAdapterPosition())
+            );
+            itemView.btnPath.setOnClickListener(v ->
+                    itemClickListener.natureDetailsClickListener(itemView.btnPath, getAdapterPosition())
+            );
         }
     }
 }

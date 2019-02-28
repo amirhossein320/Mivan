@@ -17,7 +17,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp">
+            android:layout_height="60dp">
 
             <ImageView
                 android:id="@+id/imageView10"
@@ -48,7 +48,6 @@
                 android:layout_marginTop="8dp"
                 android:gravity="right|center"
                 android:text="TextView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/background_dark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

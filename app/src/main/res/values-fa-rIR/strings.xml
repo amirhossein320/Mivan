@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">مهمان</string>
+    <string name="app_name">میوان</string>
     <string name="title_activity_maps">نقشه</string>
     <string name="nature">طبیعت</string>
     <string name="parking">پارکینگ</string>
@@ -11,7 +11,7 @@
     <string name="parks">پارک</string>
     <string name="mosque">مسجد</string>
     <string name="restaurant">رستوران</string>
-    <string name="norooz_guest_accommodation">کحل اسکان مهمانان نوروزی</string>
+    <string name="norooz_guest_accommodation">محل اسکان مهمانان نوروزی</string>
     <string name="english">english</string>
     <string name="persian">فارسی</string>
     <string name="kurdish">کوردی</string>
@@ -19,5 +19,16 @@
     <string name="list_of_places">لیست مکان ها</string>
     <string name="lang_text">این منظره زیبا از جاذبه های دیدنیه این شهر است.</string>
     <string name="place_test">پردانان</string>
+    <string name="TagLocation">مکان شما یافت نشد!</string>
+    <string name="touristList">لیست جاذبه های طبیعی</string>
+    <string name="mosqueList">لیست مساجد</string>
+    <string name="hotelList">لیست هتل ها</string>
+    <string name="gasList">لیست جایگاه های سوخت گیری</string>
+    <string name="parkingList">لیست پارکینگ ها</string>
+    <string name="resturantList">لیست رستوران ها</string>
+    <string name="parksList">لیست پارک ها</string>
+    <string name="wcList">لیست سرویس های بهداشتی</string>
+    <string name="importantsList">لیست اماکن مهم</string>
+    <string name="schoolList">لیست محل اسکان مهمانان</string>
 
 </resources>

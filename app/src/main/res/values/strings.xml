@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MivanFinal</string>
+    <string name="app_name">میوان</string>
     <string name="title_activity_maps">Map</string>
     <string name="nature">nature</string>
     <string name="parking">parking</string>
@@ -18,4 +18,15 @@
     <string name="list_of_places">list of places</string>
     <string name="lang_text">TextView TextView  TextView TextView \n  TextView TextView   TextView TextView \n  TextView TextView \n   TextView TextView   TextView TextView   TextView TextView   TextView TextView</string>
     <string name="place_test">erh sthth srtheh rherhe</string>
+    <string name="TagLocation">you`r location not  found</string>
+    <string name="touristList">list of nature places</string>
+    <string name="mosqueList">list of mosques</string>
+    <string name="hotelList">list of hotels</string>
+    <string name="gasList">list of gas`s</string>
+    <string name="parkingList">list of parkings</string>
+    <string name="resturantList">list of resturants</string>
+    <string name="parksList">list of parks</string>
+    <string name="wcList">list of ws`s</string>
+    <string name="importantsList">list of important places</string>
+    <string name="schoolList">list of school</string>
 </resources>
