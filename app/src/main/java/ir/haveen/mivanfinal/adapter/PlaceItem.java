@@ -3,27 +3,29 @@ package ir.haveen.mivanfinal.adapter;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
 import ir.haveen.mivanfinal.R;
-import ir.haveen.mivanfinal.databinding.FlodingPlaceItemBinding;
 import ir.haveen.mivanfinal.databinding.ItemPlaceBinding;
 import ir.haveen.mivanfinal.model.db.DetailsItem;
-import ir.haveen.mivanfinal.model.view.PlaceViewModel;
 
 public class PlaceItem extends RecyclerView.Adapter<PlaceItem.ViewHolder> {
 
     private List<DetailsItem> items;
     private Context context;
     private ItemClickListener itemClickListener;
+    private String resImage;
+    private boolean leftSide;
 
-    public PlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener) {
+    public PlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener, String resImage, boolean leftSide) {
         this.items = items;
         this.itemClickListener = itemClickListener;
+        this.resImage = resImage;
+        this.leftSide = leftSide;
     }
 
     @Override
@@ -39,6 +41,9 @@ public class PlaceItem extends RecyclerView.Adapter<PlaceItem.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         DetailsItem item = items.get(position);
         holder.binding.placeTitle.setText(item.getName());
+        if(leftSide) holder.binding.placeTitle.setGravity(Gravity.START | Gravity.CENTER);
+        holder.binding.imageView10.setImageResource(context.getResources()
+                .getIdentifier(resImage, "mipmap", context.getPackageName()));
     }
 
     @Override

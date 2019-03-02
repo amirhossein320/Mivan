@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import ir.haveen.mivanfinal.database.Database;
 import ir.haveen.mivanfinal.databinding.ActivitySplashBinding;
 
 public class SplashActivity extends AppCompatActivity {
@@ -58,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
     private void loadData() {
 
         binding.setFirstRun(false);//off first run
+        Database.getINSTANCE(this).dao(); // copy local database
         nextActivity();
     }
 

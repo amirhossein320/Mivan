@@ -3,6 +3,8 @@ package ir.haveen.mivanfinal;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import ir.haveen.mivanfinal.databinding.ActivityMainBinding;
 
@@ -29,4 +31,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.setting:
+                new Alerts(this).langaugeAlert();
+                break;
+            case R.id.about:
+                new Alerts(this).aboutAlert();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

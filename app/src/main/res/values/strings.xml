@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">میوان</string>
+    <string name="app_name">mivan</string>
     <string name="title_activity_maps">Map</string>
     <string name="nature">nature</string>
     <string name="parking">parking</string>
@@ -29,4 +29,8 @@
     <string name="wcList">list of ws`s</string>
     <string name="importantsList">list of important places</string>
     <string name="schoolList">list of school</string>
+    <string name="settings">language</string>
+    <string name="about">about us</string>
+    <string name="explain">more</string>
+    <string name="gpsOff">GPS is off. please turn on.</string>
 </resources>

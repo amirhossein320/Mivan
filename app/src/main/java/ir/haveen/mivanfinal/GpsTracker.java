@@ -52,7 +52,8 @@ public class GpsTracker extends Service implements LocationListener {
 
         if (!isGpsEnabled && !isNetworkEnabled) {
             canGetLocation = false;
-            // no provider enabled
+            showGpsAlertDialog();
+
         } else {
             canGetLocation = true;
             // first , get location using network provider
@@ -117,21 +118,13 @@ public class GpsTracker extends Service implements LocationListener {
     public void showGpsAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("GPS")
-                .setMessage("GPS خاموش است. لطفا آن را روشن کنیدٰ")
-                .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        context.startActivity(intent);
-                    }
+                .setMessage(R.string.gpsOff)
+                .setPositiveButton("Settings", (dialog, i) -> {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    context.startActivity(intent);
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton("Cancel", (dialog, i) -> dialog.cancel());
         builder.show();
     }
 

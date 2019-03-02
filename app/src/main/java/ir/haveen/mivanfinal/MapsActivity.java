@@ -22,6 +22,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -77,6 +80,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int id;
     private String resImage;
     private String title;
+    private boolean leftSide = false;
 
 
     @Override
@@ -87,39 +91,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         binding = DataBindingUtil.setContentView(this, R.layout.activity_maps);
         slidingLayout = binding.slidingLayout; // initialize sliding_ui_panel
 
-        checkPermision(); // check permission
-        // get data sent by intent
-        id = getIntent().getIntExtra("id", 0);
-        resImage = getIntent().getStringExtra("resImage");
-        title = getIntent().getStringExtra("tag");
-
-//        binding.title_group.setText(title);
-//        binding.icon_title.setImageResource(getResources().getIdentifier(resImage, "mipmap", getPackageName()));
-        // get load data from db
-        PlaceViewModel placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
-        placeViewModel.getPlaces(id).observe(this, detailsItems -> {
-
-            array = detailsItems; // set data to field object
-
-            //load map
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-            piranshahr = new LatLng(36.6996255, 45.1403253);
-
-            //set layout manager to recycler
-            binding.recyclerItems.setLayoutManager(new LinearLayoutManager(this));
-            //set adapter by type of group
-            if (id == 1) {
-                foldingAdapter = new NaturePlaceItem(detailsItems, this);
-                binding.recyclerItems.setAdapter(foldingAdapter);
-            } else {
-                placeAdapter = new PlaceItem(detailsItems, this);
-                binding.recyclerItems.setAdapter(placeAdapter);
-            }
-        });
-
-
+        if (checkPermission()) { // check permission
+            setUiAndData();
+        }
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -150,22 +126,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    //draw all places on map
-    private void loadMap() throws SecurityException {
-        for (DetailsItem data : array) {
-            LatLng place = new LatLng(data.getWidth(), data.getHeight());
-            int height = 80;
-            int width = 80;
-            Bitmap bitmapdraw = BitmapFactory.decodeResource(getResources(),
-                    getResources().getIdentifier(resImage, "mipmap", getPackageName()));
-            Bitmap smallMarker = Bitmap.createScaledBitmap(bitmapdraw, width, height, false);
-            mMap.addMarker(new MarkerOptions().position(place).title(data.getName()).
-                    icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
-        }
-
-        mMap.setMyLocationEnabled(true);
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -178,14 +138,73 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                             Uri uri = Uri.fromParts("package", getPackageName(), null);
                             intent.setData(uri);
+                            finish();
                             startActivityForResult(intent, REQUEST_CODE);
                         }
+                    }else{
+                        setUiAndData();
                     }
                 }
             }
         }
     }
 
+    //get for permission
+    private boolean checkPermission() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        for (String permission :
+                permissions) {
+            if (!checkPermissionGranted(permission))
+                ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_CODE);
+            else
+                return true;
+
+        }
+        return false;
+    }
+
+    //check permission granted
+    private boolean checkPermissionGranted(String permission) {
+        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    // set ui settings and set data to ui
+    private void setUiAndData() {
+        // get data sent by intent
+        id = getIntent().getIntExtra("id", 0);
+        resImage = getIntent().getStringExtra("resImage");
+        title = getIntent().getStringExtra("tag");
+
+        binding.titleGroup.setText(title);
+        if (preferences.getLang().equals("en")) {
+            binding.titleGroup.setGravity(Gravity.START | Gravity.CENTER);
+            leftSide = true;
+        }
+        binding.iconTitle.setImageResource(getResources().getIdentifier(resImage, "mipmap", getPackageName()));
+        // get load data from db
+        PlaceViewModel placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
+        placeViewModel.getPlaces(id).observe(this, detailsItems -> {
+
+            array = detailsItems; // set data to field object
+
+            //load map
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            piranshahr = new LatLng(36.6996255, 45.1403253);
+
+            //set layout manager to recycler
+            binding.recyclerItems.setLayoutManager(new LinearLayoutManager(this));
+            //set adapter by type of group
+            if (id == 1) {
+                foldingAdapter = new NaturePlaceItem(detailsItems, this, leftSide);
+                binding.recyclerItems.setAdapter(foldingAdapter);
+            } else {
+                placeAdapter = new PlaceItem(detailsItems, this, resImage, leftSide);
+                binding.recyclerItems.setAdapter(placeAdapter);
+            }
+        });
+    }
 
     @Override
     public void onBackPressed() {
@@ -195,23 +214,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             super.onBackPressed();
         }
     }
-
-    //get for permission
-    private void checkPermision() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        for (String permission :
-                permissions) {
-            if (!checkPermissionGranted(permission))
-                ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_CODE);
-        }
-    }
-
-    //check permission granted
-    private boolean checkPermissionGranted(String permission) {
-        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
-    }
-
 
     // recycler item click
     @Override
@@ -236,6 +238,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, array.get(position).getName(), Toast.LENGTH_SHORT).show();
     }
 
+
+    //draw all places on map
+    private void loadMap() throws SecurityException {
+        for (DetailsItem data : array) {
+            LatLng place = new LatLng(data.getWidth(), data.getHeight());
+            int height = 60;
+            int width = 60;
+            Bitmap bitmapDraw = BitmapFactory.decodeResource(getResources(),
+                    getResources().getIdentifier(resImage, "mipmap", getPackageName()));
+            Bitmap smallMarker = Bitmap.createScaledBitmap(bitmapDraw, width, height, false);
+            mMap.addMarker(new MarkerOptions().position(place).title(data.getName()).
+                    icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+        }
+
+        mMap.setMyLocationEnabled(true);
+    }
 
     // Fetches data from url passed
     private class FetchUrl extends AsyncTask<String, Void, String> {

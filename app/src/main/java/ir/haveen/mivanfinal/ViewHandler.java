@@ -23,4 +23,6 @@ public class ViewHandler {
     public void onItemClick(View view) {
         Toast.makeText(view.getContext(), "amir", Toast.LENGTH_SHORT).show();
     }
+
+
 }

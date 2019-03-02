@@ -3,9 +3,9 @@ package ir.haveen.mivanfinal.adapter;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,10 +19,12 @@ public class NaturePlaceItem extends RecyclerView.Adapter<NaturePlaceItem.ViewHo
     private DetailsItem item;
     private Context context;
     private ItemClickListener itemClickListener;
+    private boolean leftSide;
 
-    public NaturePlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener) {
+    public NaturePlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener, boolean leftSide) {
         this.items = items;
         this.itemClickListener = itemClickListener;
+        this.leftSide = leftSide;
     }
 
     @Override
@@ -38,6 +40,8 @@ public class NaturePlaceItem extends RecyclerView.Adapter<NaturePlaceItem.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         item = items.get(position);
         holder.binding.title.setText(item.getName());
+        if(leftSide) holder.binding.title.setGravity(Gravity.START | Gravity.CENTER);
+
     }
 
     @Override

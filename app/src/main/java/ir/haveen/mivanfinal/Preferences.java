@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.Locale;
@@ -62,14 +63,26 @@ public class Preferences {
     //change local of app
     public void setLocalToApp(AppCompatActivity activity) {
 
-        Locale locale = new Locale("fa");
+        Locale locale = new Locale(getLang());
         Locale.setDefault(locale);
 
         Configuration config = new Configuration();
-        config.locale = locale;
-        activity.getBaseContext().getResources().
-                updateConfiguration(config,
-                        activity.getBaseContext().getResources().getDisplayMetrics());
+        if(getLang()  != "en"){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                config.setLayoutDirection(new Locale("fa"));
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            config.setLocale(locale);
+            activity.getBaseContext().createConfigurationContext(config);
+        }else{
+            config.locale = locale;
+            activity.getBaseContext().getResources().
+                    updateConfiguration(config,
+                            activity.getBaseContext().getResources().getDisplayMetrics());
+        }
+
     }
 
     //get local app language
@@ -90,7 +103,7 @@ public class Preferences {
     }
 
     //return api
-    public Api api(){
+    public Api api() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://maps.googleapis.com")
                 .addConverterFactory(GsonConverterFactory.create())
