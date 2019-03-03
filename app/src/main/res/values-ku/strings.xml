@@ -34,5 +34,7 @@
     <string name="about">له باره ی ئیمه</string>
     <string name="explain">زیاتر</string>
     <string name="gpsOff">GPS گوژایه ته وه.  تکایه هه لیکه ن.</string>
+    <string name="aboutText">این برنامه جهت رفاه حال مهمان عزیز طراحی شده است. سفر خوشی را برایتان آرزو مندیم.</string>
+    <string name="cancel">په شیمان</string>
 
 </resources>

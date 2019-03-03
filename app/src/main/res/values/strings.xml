@@ -33,4 +33,6 @@
     <string name="about">about us</string>
     <string name="explain">more</string>
     <string name="gpsOff">GPS is off. please turn on.</string>
+    <string name="aboutText">this app created for piranshahr guest`s  that help them. we are haveen group developers. thank for choose us app.</string>
+    <string name="cancel">Cancel</string>
 </resources>

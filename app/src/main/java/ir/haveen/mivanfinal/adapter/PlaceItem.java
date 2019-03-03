@@ -19,13 +19,11 @@ public class PlaceItem extends RecyclerView.Adapter<PlaceItem.ViewHolder> {
     private Context context;
     private ItemClickListener itemClickListener;
     private String resImage;
-    private boolean leftSide;
 
-    public PlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener, String resImage, boolean leftSide) {
+    public PlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener, String resImage) {
         this.items = items;
         this.itemClickListener = itemClickListener;
         this.resImage = resImage;
-        this.leftSide = leftSide;
     }
 
     @Override
@@ -41,7 +39,6 @@ public class PlaceItem extends RecyclerView.Adapter<PlaceItem.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         DetailsItem item = items.get(position);
         holder.binding.placeTitle.setText(item.getName());
-        if(leftSide) holder.binding.placeTitle.setGravity(Gravity.START | Gravity.CENTER);
         holder.binding.imageView10.setImageResource(context.getResources()
                 .getIdentifier(resImage, "mipmap", context.getPackageName()));
     }

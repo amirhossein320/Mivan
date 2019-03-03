@@ -1,8 +1,12 @@
 package ir.haveen.mivanfinal;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -67,16 +71,16 @@ public class Preferences {
         Locale.setDefault(locale);
 
         Configuration config = new Configuration();
-        if(getLang()  != "en"){
+        if (getLang() != "en") {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 config.setLayoutDirection(new Locale("fa"));
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
-                && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             config.setLocale(locale);
             activity.getBaseContext().createConfigurationContext(config);
-        }else{
+        } else {
             config.locale = locale;
             activity.getBaseContext().getResources().
                     updateConfiguration(config,
@@ -109,5 +113,26 @@ public class Preferences {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(Api.class);
+    }
+
+    //restart app method
+    public void restartApp(Activity context) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Intent intent = context.getIntent();
+            context.finish();
+            context.startActivity(intent);
+        } else {
+            Intent mStartActivity = new Intent(context, context.getClass());
+            int mPendingIntentId = 123456;
+            PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 10, mPendingIntent);
+            context.finish();
+            int pid = android.os.Process.myPid();
+            android.os.Process.killProcess(pid);
+            System.exit(0);
+        }
+
     }
 }

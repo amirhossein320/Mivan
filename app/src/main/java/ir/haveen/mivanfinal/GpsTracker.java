@@ -119,12 +119,12 @@ public class GpsTracker extends Service implements LocationListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("GPS")
                 .setMessage(R.string.gpsOff)
-                .setPositiveButton("Settings", (dialog, i) -> {
+                .setPositiveButton(R.string.settings, (dialog, i) -> {
                     Intent intent = new Intent();
                     intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     context.startActivity(intent);
                 })
-                .setNegativeButton("Cancel", (dialog, i) -> dialog.cancel());
+                .setNegativeButton(R.string.cancel, (dialog, i) -> dialog.cancel());
         builder.show();
     }
 
@@ -132,6 +132,12 @@ public class GpsTracker extends Service implements LocationListener {
         if (locationManager != null && hasPermissions()) {
             locationManager.removeUpdates(this);
         }
+    }
+
+    public boolean isGpsEnabled() {
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return isGpsEnabled;
     }
 
     @Override

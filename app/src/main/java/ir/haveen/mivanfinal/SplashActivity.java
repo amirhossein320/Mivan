@@ -21,7 +21,9 @@ public class SplashActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
         if (preferences.IsFirstRun()) {//check first run
+            preferences.setFirstRunOff();
             binding.setFirstRun(true);
+//            preferences.setLocaleLang("fa");
             click();
         } else {
             loadData();
@@ -31,35 +33,21 @@ public class SplashActivity extends AppCompatActivity {
 
     //init clickable option for choose language
     private void click() {
-
-        binding.btnFA.setOnClickListener((v) -> {
-            preferences.setLocaleLang("fa");
-            preferences.setFirstRunOff();
-            loadData();
-        });
-        binding.btnKU.setOnClickListener((v) -> {
-            preferences.setLocaleLang("ku");
-            preferences.setFirstRunOff();
-            loadData();
-        });
-        binding.btnEN.setOnClickListener((v) -> {
-            preferences.setLocaleLang("en");
-            preferences.setFirstRunOff();
-            loadData();
-        });
+        binding.btnFA.setOnClickListener((v) -> firstRun("fa"));
+        binding.btnKU.setOnClickListener((v) -> firstRun("ku"));
+        binding.btnEN.setOnClickListener((v) -> firstRun("en"));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        preferences.setLocalToApp(this);
+    //first run works
+    private void firstRun(String lang) {
+        preferences.setLocaleLang(lang);
+        preferences.restartApp(this);
     }
 
     //load data from server
     private void loadData() {
-
         binding.setFirstRun(false);//off first run
-        Database.getINSTANCE(this).dao(); // copy local database
+        Database.getINSTANCE(this.getApplication()).dao(); // copy local database
         nextActivity();
     }
 

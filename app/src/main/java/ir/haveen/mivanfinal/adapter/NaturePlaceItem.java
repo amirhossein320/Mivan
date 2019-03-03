@@ -19,12 +19,10 @@ public class NaturePlaceItem extends RecyclerView.Adapter<NaturePlaceItem.ViewHo
     private DetailsItem item;
     private Context context;
     private ItemClickListener itemClickListener;
-    private boolean leftSide;
 
-    public NaturePlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener, boolean leftSide) {
+    public NaturePlaceItem(List<DetailsItem> items, ItemClickListener itemClickListener) {
         this.items = items;
         this.itemClickListener = itemClickListener;
-        this.leftSide = leftSide;
     }
 
     @Override
@@ -40,8 +38,6 @@ public class NaturePlaceItem extends RecyclerView.Adapter<NaturePlaceItem.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         item = items.get(position);
         holder.binding.title.setText(item.getName());
-        if(leftSide) holder.binding.title.setGravity(Gravity.START | Gravity.CENTER);
-
     }
 
     @Override

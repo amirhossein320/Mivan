@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,17 +30,17 @@ public class Alerts {
         //set local to persian
         view.findViewById(R.id.btnFA).setOnClickListener(v -> {
             preferences.setLocaleLang("fa");
-            restartApp();
+            preferences.restartApp(context);
         });
         //set local to kurdish
         view.findViewById(R.id.btnKU).setOnClickListener(v -> {
             preferences.setLocaleLang("ku");
-            restartApp();
+            preferences.restartApp(context);
         });
         //set local to english
         view.findViewById(R.id.btnEN).setOnClickListener(v -> {
             preferences.setLocaleLang("en");
-            restartApp();
+            preferences.restartApp(context);
         });
         builder.setView(view);
         AlertDialog alertDialog = builder.create();
@@ -50,43 +51,24 @@ public class Alerts {
 
     public void aboutAlert() {
 
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.about_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        //get g_mail app for send email
+        view.findViewById(R.id.gmail).setOnClickListener(v -> {
+
+        });
+        //get telegram app for contact by telegram
+        view.findViewById(R.id.telegram).setOnClickListener(v -> {
+
+        });
+
+        builder.setView(view);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
     }
 
-    private void restartApp() {
 
-        Intent intent = new Intent(context, context.getClass());
-        context.finish();
-        context.startActivity(intent);
-
-//        Intent intent = context.getIntent();
-//        context.finish();
-//        context.startActivity(intent);
-
-
-//        Intent intent = new Intent(Intent.ACTION_MAIN);
-//        intent.addCategory(Intent.CATEGORY_HOME);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        context.startActivity(intent);
-
-//        Intent mStartActivity = new Intent(context, context.getClass());
-//        int mPendingIntentId = 123456;
-//        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-//        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-//        context.finish();
-//        int pid = android.os.Process.myPid();
-//        android.os.Process.killProcess(pid);
-//        System.exit(0);
-//
-
-//        Intent i = context.getBaseContext().getPackageManager().
-//                getLaunchIntentForPackage(context.getBaseContext().getPackageName());
-//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//        context.finish();
-//        int pid = android.os.Process.myPid();
-//        android.os.Process.killProcess(pid);
-//        context.startActivity(i);
-    }
 }

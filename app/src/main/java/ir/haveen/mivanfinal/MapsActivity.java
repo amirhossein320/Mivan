@@ -80,7 +80,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int id;
     private String resImage;
     private String title;
-    private boolean leftSide = false;
 
 
     @Override
@@ -123,7 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
-
+        gpsTracker.onLocationChanged(location);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -177,11 +176,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         title = getIntent().getStringExtra("tag");
 
         binding.titleGroup.setText(title);
-        if (preferences.getLang().equals("en")) {
-            binding.titleGroup.setGravity(Gravity.START | Gravity.CENTER);
-            leftSide = true;
-        }
         binding.iconTitle.setImageResource(getResources().getIdentifier(resImage, "mipmap", getPackageName()));
+
         // get load data from db
         PlaceViewModel placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
         placeViewModel.getPlaces(id).observe(this, detailsItems -> {
@@ -197,10 +193,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             binding.recyclerItems.setLayoutManager(new LinearLayoutManager(this));
             //set adapter by type of group
             if (id == 1) {
-                foldingAdapter = new NaturePlaceItem(detailsItems, this, leftSide);
+                foldingAdapter = new NaturePlaceItem(detailsItems, this);
                 binding.recyclerItems.setAdapter(foldingAdapter);
             } else {
-                placeAdapter = new PlaceItem(detailsItems, this, resImage, leftSide);
+                placeAdapter = new PlaceItem(detailsItems, this, resImage);
                 binding.recyclerItems.setAdapter(placeAdapter);
             }
         });
@@ -221,7 +217,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (location != null) {
             mMap.clear();
             loadMap();
-            myLocation = new LatLng(array.get(position + 1).getWidth(), array.get(position + 1).getHeight());
+//            myLocation = new LatLng(array.get(position + 1).getWidth(), array.get(position + 1).getHeight());
             LatLng dest = new LatLng(array.get(position).getWidth(), array.get(position).getHeight());
 
             FetchUrl fetchUrl = new FetchUrl();

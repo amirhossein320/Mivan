@@ -104,7 +104,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:gravity="right|center"
+                        android:gravity="center_vertical"
                         android:text="@string/list_of_places"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/background_light"
